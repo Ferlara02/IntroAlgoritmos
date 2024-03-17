@@ -1,5 +1,9 @@
 -- Práctico 1 HASKELL | Introducción a los Algoritmos - FAMAFC
 
+absoluto :: Int -> Int
+absoluto x | x > 0 || x == 0   = x
+           | x < 0   = -x
+
 -- Ej. 19-24)
 
 esMultiploDe x y = (mod y x == 0)
