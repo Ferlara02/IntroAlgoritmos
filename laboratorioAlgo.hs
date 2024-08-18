@@ -90,3 +90,13 @@ masGrande n (x:xs)
     | pert n (x:xs) = n >= x && masGrande n xs
     | otherwise = False
 
+productoPares :: [Int] -> Int
+productoPares [] = 1
+productoPares (x:xs)
+    | mod x 2 /= 0 = productoPares xs
+    | otherwise = x * productoPares xs
+
+sumaPosicionPar :: [Int] -> Int
+sumaPosicionPar [] = 0
+sumaPosicionPar (x:xs) 
+    | mod 
