@@ -35,3 +35,17 @@ ordena (x, y) = ((min x y), (max x y))
 
 todosIguales :: (Num a, Ord a) => (a, a, a) -> Bool 
 todosIguales (x, y, z) = x == y && y == z
+
+esCero :: Int -> Bool
+esCero x = x == 0
+
+esPositivo :: Int -> Bool
+esPositivo x = x > 0
+
+esVocal :: Char -> Bool 
+esVocal x = (x == 'a' || x == 'e' || x == 'i' || x == 'o' || x == 'u')
+
+valorAbsoluto:: Int -> Int 
+valorAbsoluto x 
+    | x < 0 = -x
+    | otherwise = x
