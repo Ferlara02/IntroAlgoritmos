@@ -108,3 +108,57 @@ sumaPosicionPar [] = 0
 sumaPosicionPar (x:y:xs) 
     | (mod (posicion x (y:xs)) 2 == 0) = x + sumaPosicionPar (y:xs)
     | otherwise = sumaPosicionPar (y:xs)
+
+-- Lab 7
+
+paraTodo2 :: [a] -> (a -> Bool) -> Bool
+paraTodo2 [] t = True
+paraTodo2 (x:xs) t = t x && paraTodo2 xs t
+
+existe2 :: [a] -> (a -> Bool) -> Bool
+existe2 [] t = False
+existe2 (x:xs) t = t x || existe2 xs t
+
+sumatoria2 :: [a] -> (a -> Int) -> Int 
+sumatoria2 [] t = 0
+sumatoria2 (x:xs) t = t x + sumatoria2 xs t  
+
+productoria2 :: [a] -> (a -> Int) -> Int 
+productoria2 [] t = 1
+productoria2 (x:xs) t = t x * productoria2 xs t
+
+--Lab 9
+
+--auxiliares:
+esPar :: Int->Bool
+esPar x = mod x 2 == 0
+
+esMultiplo :: Int -> Int -> Bool
+esMultiplo a x = mod x a == 0
+
+cuadrado :: Int->Int
+cuadrado n = n^2
+
+esDivisor :: Int -> Int -> Bool
+esDivisor n a = mod n a == 0
+----------------------
+todosPares :: [Int] -> Bool
+todosPares [] = True
+todosPares (x:xs) = paraTodo2 (x:xs) esPar
+
+hayMultiplo :: Int -> [Int] -> Bool
+hayMultiplo a [] = False
+hayMultiplo a (x:xs) = existe2 (x:xs) (esMultiplo a)
+
+sumaCuadrados :: Int -> Int
+sumaCuadrados n = sumatoria2 [0..n] cuadrado
+
+existeDivisor :: Int -> [Int] -> Bool 
+existeDivisor n [] = False
+existeDivisor n (x:xs) = existe2 (x:xs) (esDivisor n)
+
+esPrimo :: Int -> Bool
+esPrimo 1 = False
+esPrimo n = existeDivisor n [2..n-1] == False
+
+factorial2 :: 
