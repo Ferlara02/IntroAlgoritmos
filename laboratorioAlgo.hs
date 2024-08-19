@@ -96,7 +96,15 @@ productoPares (x:xs)
     | mod x 2 /= 0 = productoPares xs
     | otherwise = x * productoPares xs
 
+posicion :: Int -> [Int] -> Int
+posicion a [] = -1
+posicion a (x:xs) 
+    | a == x = 0
+    | pert a (xs) = 1 + posicion a xs 
+    | otherwise = -1
+
 sumaPosicionPar :: [Int] -> Int
 sumaPosicionPar [] = 0
-sumaPosicionPar (x:xs) 
-    | mod 
+sumaPosicionPar (x:y:xs) 
+    | (mod (posicion x (y:xs)) 2 == 0) = x + sumaPosicionPar (y:xs)
+    | otherwise = sumaPosicionPar (y:xs)
