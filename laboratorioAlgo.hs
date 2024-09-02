@@ -76,10 +76,59 @@ todos :: [Bool] -> Bool
 todos [] = True
 todos (x:xs) = x == True && todos xs
 
--LAB 2
+sum_cuad:: [Int] -> Int
+sum_cuad [] = 0
+sum_cuad (x:xs) = x*x + sum_cuad xs
+
+iga :: Eq a => a -> [a] -> Bool
+iga a [] = True
+iga a (x:xs) = a == x && (iga a xs)
+
+exp :: Int -> Int -> Int
+exp x n = x*n
+
+sumPar :: Int -> Int
+sumPar 0 = 0
+sumPar n
+    | even n = n + sumPar (n-1)
+    | odd n = sumPar (n-1)
+
+cuantos :: (Int -> Bool) -> [Int] -> Int
+cuantos p xs = length (filter p xs)
+
+--LAB 2
+
+data Dia = Lunes | Martes | Miercoles  | Jueves | Viernes | Sabado | Domingo
+    deriving (Eq, Show, Ord, Bounded, Enum)
+data Tarea = Trabajar | TrabajarPoco | Salir | Descansar
+    deriving (Eq, Show, Ord, Bounded, Enum)
+
+tareaDiaria :: Dia -> Tarea
+tareaDiaria Viernes = TrabajarPoco
+tareaDiaria Sabado = Salir
+tareaDiaria _ = Trabajar
+
+
+horasTrabajo :: Dia -> Int
+horasTrabajo d = case tareaDiaria d of
+                        Trabajar -> 8 
+                        TrabajarPoco -> 4
+                        _ -> 0
+
+type Punto = (Float, Float)
+type Radio = Float
+data Figura = Circulo Punto Radio | Rectangulo Punto Punto
+
+area :: Figura -> Float
+area (Circulo p r) = 3.1416 * r * r
+area (Rectangulo p q) = base * altura 
+                                where base = fst q - fst p
+                                      altura = snd q - snd p
+
+
 
 data Carrera = Matematica | Fisica | Computacion | Astronomia 
-deriving Eq
+ deriving Eq
 titulo :: Carrera -> String
 titulo Matematica = "Licenciatura en Matemática"
 titulo Fisica = "Licenciatura en Física"
@@ -105,24 +154,29 @@ minimoElemento [x] = x
 minimoElemento (x:xs) = min x (minimoElemento xs)
 
 minimoElemento':: (Bounded a, Ord a) => [a] -> a
-minimoElemento' [] = maxBound
+minimoElemento' [] = minBound
 minimoElemento' [x] = x
 minimoElemento' (x:xs) = min x (minimoElemento' xs)
 
 -- LAB 5
 
 --Sin ́onimos de tipo
+
 type Altura = Int
 type NumCamiseta = Int
+
 --Tipos algebr ́aicos sin par ́ametros (aka enumerados)
 data Zona = Arco | Defensa | Mediocampo | Delantera
 data TipoReves = DosManos | UnaMano
 data Modalidad = Carretera | Pista | Monte | BMX
 data PiernaHabil = Izquierda | Derecha
--- Sin ́onimo
+
+-- Sinonimo
 type ManoHabil = PiernaHabil
--- Deportista es un tipo algebraico con constructores param ́etricos
-data Deportista = Ajedrecista | Ciclista Modalidad  | Velocista Altura | Tenista TipoReves ManoHabil Altura | Futbolista Zona NumCamiseta PiernaHabil Altura 
+
+-- Deportista es un tipo algebraico con constructores parametricos
+data Deportista = Ajedrecista | Ciclista Modalidad  | Velocista Altura | Tenista TipoReves ManoHabil Altura | Futbolista Zona NumCamiseta PiernaHabil Altura
+
 
 contarVelocistas:: [Deportista] -> Int
 contarVelocistas [] = 0
@@ -139,11 +193,36 @@ contarFut ((_):xs) z = contarFut xs z
 
 contarFutb :: [Deportista] -> Zona -> Int
 contarFutb [] z = 0
-contarFutb ((Futbolista (Arco)(_)(_)(_)):xs) Arco = 1 + contarFutb xs Arco
-contarFutb ((Futbolista (Mediocampo)(_)(_)(_)):xs) Mediocampo = 1 + contarFutb xs Mediocampo
-contarFutb ((Futbolista (Delantera)(_)(_)(_)):xs) Delantera = 1 + contarFutb xs Delantera
-contarFutb ((Futbolista (Defensa)(_)(_)(_)):xs) Defensa = 1 + contarFutb xs Defensa
+contarFutb ((Futbolista (p) (_) (_) (_)):xs) z = case z of
+                                            p -> 1 + contarFutb xs z
+                                            _ -> contarFutb xs z 
 contarFutb ((_):xs) z = contarFutb xs z
 
+--Lab 10
+sonidoNatural :: NotaBasica -> Int
+sonidoNatural Do = 0
+sonidoNatural Re = 2
+sonidoNatural Mi = 4
+sonidoNatural Fa = 5
+sonidoNatural Sol = 7
+sonidoNatural La = 9
+sonidoNatural Si = 11
+
+data Alteracion = Bemol | Natural | Sostenido
+    deriving Eq 
+data NotaMusical = Nota NotaBasica Alteracion
+    
 
 
+sonidoCromatico :: NotaMusical -> Int
+sonidoCromatico (Nota b a) = case a of
+                            Sostenido -> sonidoNatural b + 1
+                            Bemol -> sonidoNatural b - 1
+                            Natural -> sonidoNatural b
+
+
+instance Eq NotaMusical where 
+    x == y = sonidoCromatico x == sonidoCromatico y
+
+instance Ord NotaMusical where
+    x <= y = sonidoCromatico x <= sonidoCromatico y
