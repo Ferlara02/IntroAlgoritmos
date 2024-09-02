@@ -75,3 +75,75 @@ isMaxMin (x:xs) (y:ys) = maximo (x:xs) < minimo (y:ys)
 todos :: [Bool] -> Bool
 todos [] = True
 todos (x:xs) = x == True && todos xs
+
+-LAB 2
+
+data Carrera = Matematica | Fisica | Computacion | Astronomia 
+deriving Eq
+titulo :: Carrera -> String
+titulo Matematica = "Licenciatura en Matemática"
+titulo Fisica = "Licenciatura en Física"
+titulo Computacion = "Licenciatura en Ciencias de la Computación"
+titulo Astronomia = "Licenciatura en Astronomia"
+
+data NotaBasica = Do | Re | Mi | Fa | Sol | La | Si 
+ deriving (Ord, Eq, Show)
+
+cifradoAmericano :: NotaBasica -> Char
+cifradoAmericano Do = 'C'
+cifradoAmericano Re = 'D'
+cifradoAmericano Mi = 'E'
+cifradoAmericano Fa = 'F'
+cifradoAmericano Sol = 'G'
+cifradoAmericano La = 'A'
+cifradoAmericano Si = 'B'
+
+--LAB 4
+
+minimoElemento:: (Ord a) => [a] -> a
+minimoElemento [x] = x
+minimoElemento (x:xs) = min x (minimoElemento xs)
+
+minimoElemento':: (Bounded a, Ord a) => [a] -> a
+minimoElemento' [] = maxBound
+minimoElemento' [x] = x
+minimoElemento' (x:xs) = min x (minimoElemento' xs)
+
+-- LAB 5
+
+--Sin ́onimos de tipo
+type Altura = Int
+type NumCamiseta = Int
+--Tipos algebr ́aicos sin par ́ametros (aka enumerados)
+data Zona = Arco | Defensa | Mediocampo | Delantera
+data TipoReves = DosManos | UnaMano
+data Modalidad = Carretera | Pista | Monte | BMX
+data PiernaHabil = Izquierda | Derecha
+-- Sin ́onimo
+type ManoHabil = PiernaHabil
+-- Deportista es un tipo algebraico con constructores param ́etricos
+data Deportista = Ajedrecista | Ciclista Modalidad  | Velocista Altura | Tenista TipoReves ManoHabil Altura | Futbolista Zona NumCamiseta PiernaHabil Altura 
+
+contarVelocistas:: [Deportista] -> Int
+contarVelocistas [] = 0
+contarVelocistas (Velocista(_):xs) = 1 + contarVelocistas xs
+contarVelocistas ((_):xs) = contarVelocistas xs
+
+contarFut :: [Deportista] -> Zona -> Int
+contarFut [] z = 0
+contarFut ((Futbolista (Arco)(_)(_)(_)):xs) Arco = 1 + contarFut xs Arco
+contarFut ((Futbolista (Mediocampo)(_)(_)(_)):xs) Mediocampo = 1 + contarFut xs Mediocampo
+contarFut ((Futbolista (Delantera)(_)(_)(_)):xs) Delantera = 1 + contarFut xs Delantera
+contarFut ((Futbolista (Defensa)(_)(_)(_)):xs) Defensa = 1 + contarFut xs Defensa
+contarFut ((_):xs) z = contarFut xs z
+
+contarFutb :: [Deportista] -> Zona -> Int
+contarFutb [] z = 0
+contarFutb ((Futbolista (Arco)(_)(_)(_)):xs) Arco = 1 + contarFutb xs Arco
+contarFutb ((Futbolista (Mediocampo)(_)(_)(_)):xs) Mediocampo = 1 + contarFutb xs Mediocampo
+contarFutb ((Futbolista (Delantera)(_)(_)(_)):xs) Delantera = 1 + contarFutb xs Delantera
+contarFutb ((Futbolista (Defensa)(_)(_)(_)):xs) Defensa = 1 + contarFutb xs Defensa
+contarFutb ((_):xs) z = contarFutb xs z
+
+
+
