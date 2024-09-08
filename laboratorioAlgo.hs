@@ -310,12 +310,12 @@ minimoElemento' (x:xs) = min x (minimoElemento' xs)
 
 -- LAB 5
 
---Sin ́onimos de tipo
+--Sinonimos de tipo
 
 type Altura = Int
 type NumCamiseta = Int
 
---Tipos algebr ́aicos sin par ́ametros (aka enumerados)
+--Tipos algebraicos sin parametros (aka enumerados)
 data Zona = Arco | Defensa | Mediocampo | Delantera
 data TipoReves = DosManos | UnaMano
 data Modalidad = Carretera | Pista | Monte | BMX
@@ -335,18 +335,13 @@ contarVelocistas ((_):xs) = contarVelocistas xs
 
 contarFut :: [Deportista] -> Zona -> Int
 contarFut [] z = 0
-contarFut ((Futbolista (Arco)(_)(_)(_)):xs) Arco = 1 + contarFut xs Arco
-contarFut ((Futbolista (Mediocampo)(_)(_)(_)):xs) Mediocampo = 1 + contarFut xs Mediocampo
-contarFut ((Futbolista (Delantera)(_)(_)(_)):xs) Delantera = 1 + contarFut xs Delantera
-contarFut ((Futbolista (Defensa)(_)(_)(_)):xs) Defensa = 1 + contarFut xs Defensa
+contarFut ((Futbolista Arco _ _ _):xs) Arco = 1 + contarFut xs Arco
+contarFut ((Futbolista Mediocampo _ _ _):xs) Mediocampo = 1 + contarFut xs Mediocampo
+contarFut (Futbolista Delantera _ _ _):xs) Delantera = 1 + contarFut xs Delantera
+contarFut ((Futbolista (Defensa _ _ _):xs) Defensa = 1 + contarFut xs Defensa
 contarFut ((_):xs) z = contarFut xs z
 
-contarFutb :: [Deportista] -> Zona -> Int
-contarFutb [] z = 0
-contarFutb ((Futbolista (p) (_) (_) (_)):xs) z = case z of
-                                            p -> 1 + contarFutb xs z
-                                            _ -> contarFutb xs z 
-contarFutb ((_):xs) z = contarFutb xs z
+
 
 --Lab 10
 sonidoNatural :: NotaBasica -> Int
