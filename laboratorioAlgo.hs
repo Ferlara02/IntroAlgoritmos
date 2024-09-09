@@ -317,15 +317,19 @@ type NumCamiseta = Int
 
 --Tipos algebraicos sin parametros (aka enumerados)
 data Zona = Arco | Defensa | Mediocampo | Delantera
+    deriving Show
 data TipoReves = DosManos | UnaMano
+    deriving Show
 data Modalidad = Carretera | Pista | Monte | BMX
+    deriving Show
 data PiernaHabil = Izquierda | Derecha
-
+    deriving Show
 -- Sinonimo
 type ManoHabil = PiernaHabil
 
 -- Deportista es un tipo algebraico con constructores parametricos
 data Deportista = Ajedrecista | Ciclista Modalidad  | Velocista Altura | Tenista TipoReves ManoHabil Altura | Futbolista Zona NumCamiseta PiernaHabil Altura
+    deriving Show
 
 
 contarVelocistas:: [Deportista] -> Int
@@ -337,8 +341,8 @@ contarFut :: [Deportista] -> Zona -> Int
 contarFut [] z = 0
 contarFut ((Futbolista Arco _ _ _):xs) Arco = 1 + contarFut xs Arco
 contarFut ((Futbolista Mediocampo _ _ _):xs) Mediocampo = 1 + contarFut xs Mediocampo
-contarFut (Futbolista Delantera _ _ _):xs) Delantera = 1 + contarFut xs Delantera
-contarFut ((Futbolista (Defensa _ _ _):xs) Defensa = 1 + contarFut xs Defensa
+contarFut ((Futbolista Delantera _ _ _):xs) Delantera = 1 + contarFut xs Delantera
+contarFut ((Futbolista Defensa _ _ _):xs) Defensa = 1 + contarFut xs Defensa
 contarFut ((_):xs) z = contarFut xs z
 
 
@@ -443,6 +447,19 @@ laAgregar (Nodo a b c) d e
 laPares :: ListaAsoc a b -> [(a, b)]
 laPares Vacia = []
 laPares (Nodo a b c) = (a, b) : laPares c
+
+laBusca :: Eq a => ListaAsoc a b -> a -> Maybe b
+laBusca Vacia a = Nothing
+laBusca (Nodo a b c) d 
+    | a == d = Just b
+    | otherwise = laBusca c d
+
+laBorrar :: Eq a => a -> ListaAsoc a b -> ListaAsoc a b
+laBorrar a Vacia = Vacia
+laBorrar d (Nodo a b c) 
+    | d == a = c
+    | otherwise = Nodo a b (laBorrar d c)
+
 
 data Palabra = PVacia | Agregar Char Palabra
 
