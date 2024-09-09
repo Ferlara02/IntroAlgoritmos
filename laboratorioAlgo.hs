@@ -440,6 +440,10 @@ laAgregar (Nodo a b c) d e
     | a == d = Nodo a e c
     | otherwise = Nodo a b (laAgregar c d e)
 
+laPares :: ListaAsoc a b -> [(a, b)]
+laPares Vacia = []
+laPares (Nodo a b c) = (a, b) : laPares c
+
 data Palabra = PVacia | Agregar Char Palabra
 
 mostrar :: Palabra -> String
