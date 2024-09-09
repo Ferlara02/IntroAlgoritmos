@@ -435,10 +435,10 @@ laConcat (Nodo a b c) Vacia = Nodo a b c
 laConcat (Nodo a b c) (Nodo d e f) = Nodo a b (laConcat c (Nodo d e f))
 
 laAgregar :: Eq a => ListaAsoc a b -> a -> b -> ListaAsoc a b
-laAgregar Vacia a b =   
+laAgregar Vacia a b = Nodo a b Vacia
 laAgregar (Nodo a b c) d e 
-    | a == d = (Nodo a e c)
-    | otherwise = laAgregar c d e
+    | a == d = Nodo a e c
+    | otherwise = Nodo a b (laAgregar c d e)
 
 data Palabra = PVacia | Agregar Char Palabra
 
