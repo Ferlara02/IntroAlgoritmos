@@ -381,3 +381,90 @@ prod (x:xs) (y:ys) = (x*y) + (prod (xs) (ys))
 gSumAnt :: Int -> [Int] -> Bool
 gSumAnt n [] = False
 gSumAnt n (x:xs) = x == n || gSumAnt (n+x) xs
+
+--CLASE 9/9
+--LAB 11
+dividir :: Int -> Int -> Maybe Int
+dividir x 0 = Nothing
+dividir x y = Just (x `div` y)
+
+
+primerElemento :: [a] -> Maybe a 
+primerElemento [] = Nothing
+primerElemento (x:xs) = Just x
+
+--LAB 12
+data Cola = VaciaC | Encolada Deportista Cola
+    deriving Show
+
+atender :: Cola -> Maybe Cola
+atender VaciaC = Nothing
+atender (Encolada d c) = Just c
+
+encolar :: Deportista -> Cola -> Cola
+encolar d VaciaC = (Encolada d VaciaC)
+encolar d (Encolada p c) = Encolada p (encolar d c)
+
+busca :: Cola -> Zona -> Maybe Deportista
+busca VaciaC z = Nothing
+busca (Encolada (Futbolista Arco b s d) c) Arco = Just (Futbolista Arco b s d)
+busca (Encolada (Futbolista Defensa b s d) c) Defensa = Just (Futbolista Defensa b s d)
+busca (Encolada (Futbolista Mediocampo b s d) c) Mediocampo = Just (Futbolista Mediocampo b s d)
+busca (Encolada (Futbolista Delantera b s d) c) Delantera = Just (Futbolista Delantera b s d)
+busca (Encolada (_) c) z = busca c z
+
+
+--Lab 13
+
+data ListaAsoc a b = Vacia | Nodo a b (ListaAsoc a b)
+    deriving Show
+--instanciacion de a y b:
+type Diccionario = ListaAsoc String String
+type Padron = ListaAsoc Int String
+type GuiaTelefonica = ListaAsoc String Int
+
+--funciones lab 13
+laLong :: ListaAsoc a b -> Int 
+laLong Vacia = 0
+laLong (Nodo a b c) = 1 + laLong c 
+
+laConcat :: ListaAsoc a b -> ListaAsoc a b -> ListaAsoc a b
+laConcat Vacia Vacia = Vacia
+laConcat Vacia (Nodo a b c) = Nodo a b c
+laConcat (Nodo a b c) Vacia = Nodo a b c
+laConcat (Nodo a b c) (Nodo d e f) = Nodo a b (laConcat c (Nodo d e f))
+
+laAgregar :: Eq a => ListaAsoc a b -> a -> b -> ListaAsoc a b
+laAgregar Vacia a b =   
+laAgregar (Nodo a b c) d e 
+    | a == d = (Nodo a e c)
+    | otherwise = laAgregar c d e
+
+data Palabra = PVacia | Agregar Char Palabra
+
+mostrar :: Palabra -> String
+mostrar PVacia = ""
+mostrar (Agregar l p) = l : mostrar p
+
+data ListaInt = LVacia | ConsI Int ListaInt
+--esto se corresponde a los constructores de lista ya definidos : y []  
+
+--TIPOS RECURSIVOS Y POLIMORFICOS
+
+data Lista a = Vacia2 | Cons a (Lista a)
+--es como ListaInt solo que polimorfica, recibe el tipo de datos que sea
+
+
+data Clase = Teorico | Taller
+hayClase :: Dia -> Maybe Clase
+hayClase Lunes = Just Taller
+hayClase Martes = Just Teorico
+hayClase Jueves = Just Teorico
+hayClase _ = Nothing 
+
+
+actividad :: Dia -> String
+actividad d = case hayClase d of
+                Nothing -> "Tareas"
+                Just Teorico -> "Teorico"
+                Just Taller -> "Taller"
